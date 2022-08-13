@@ -1,0 +1,55 @@
+.spoiler {
+  border-top: var(--spoiler-border-width) solid var(--border-color);
+  border-bottom: var(--spoiler-border-width) solid var(--border-color);
+}
+
+.spoiler__btn {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 1em;
+  width: 100%;
+  padding: 1.5rem 0;
+  border: 0 none;
+  font-size: 1.8rem;
+  text-align: start;
+  color: var(--text-color-second);
+  background: none;
+  transition: color var(--duration);
+  cursor: pointer;
+  outline: none;
+
+  &::after {
+    content: '';
+    display: block;
+    width: .55em;
+    height: .55em;
+    margin-top: .36em;
+    background: center/cover no-repeat url(../../assets/icons/plus.svg);
+    transition: transform var(--duration);
+  }
+
+  &:hover,
+  &:focus {
+    color: var(--active-color);
+  }
+}
+
+.spoiler__btn_active {
+  &::after {
+    transform: rotate(45deg);
+  }
+}
+
+.spoiler__content {
+  overflow: hidden;
+  height: 0;
+  transition: height var(--duration);
+
+  & > :first-child {
+    margin-top: 0;
+  }
+
+  & > :last-child {
+    margin-bottom: 1.5rem;
+  }
+}
