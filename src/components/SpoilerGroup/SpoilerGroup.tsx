@@ -3,7 +3,7 @@ import cn from 'classnames';
 
 import styles from './SpoilerGroup.module.scss';
 
-interface SpoilerGroupProps
+export interface SpoilerGroupProps
   extends DetailedHTMLProps<
     React.HTMLAttributes<HTMLUListElement>,
     HTMLUListElement

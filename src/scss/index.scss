@@ -8,9 +8,9 @@
 
   --border-color: #E6E6E6;
 
-  --duration: .2s;
-
   --spoiler-border-width: 1px;
+
+  --duration: .2s;
 }
 
 * {
@@ -36,6 +36,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--text-color-base);
+  padding-bottom: 500px;
 }
 
 code {

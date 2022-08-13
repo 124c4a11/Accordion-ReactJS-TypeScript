@@ -2,6 +2,7 @@ import {
   ComponentProps,
   ElementType,
   MouseEvent,
+  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -11,8 +12,10 @@ import styles from './Spoiler.module.scss';
 
 interface OwnProps<T> {
   title?: string;
-  htmlContent?: string;
+  content?: string;
   component?: T extends 'div' | 'li' ? T : 'div';
+  accordion?: boolean;
+  opened?: boolean;
 }
 
 type SpoilerProps<T extends ElementType> = OwnProps<T> &
@@ -20,19 +23,36 @@ type SpoilerProps<T extends ElementType> = OwnProps<T> &
 
 export function Spoiler<T extends ElementType = 'div' | 'li'>({
   title,
-  htmlContent,
+  content,
+  className,
   component,
   children,
-  className,
+  accordion = false,
+  opened = false,
   ...props
 }: SpoilerProps<T>): JSX.Element {
   const [isAnimated, setIsAnimated] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const delay = 200;
+  const [delay, setDelay] = useState<number>(0);
 
   const contentRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (opened && !isOpen) open();
+    if (!opened && isOpen) close();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opened, contentRef]);
+
+  useEffect(() => {
+    const delay =
+      parseFloat(getComputedStyle(contentRef.current!).transitionDuration) *
+        1000 || 0;
+
+    setDelay(delay);
+  }, [contentRef]);
+
   function clickHandler(e: MouseEvent) {
+    if (accordion) return;
     if (isAnimated) return;
     if (!contentRef.current) return;
 
@@ -74,16 +94,17 @@ export function Spoiler<T extends ElementType = 'div' | 'li'>({
         className={cn(styles['spoiler__btn'], {
           [styles['spoiler__btn_active']]: isOpen,
         })}
+        data-role="spoiler-toggle"
         aria-expanded={isOpen}
         onClick={clickHandler}
       >
         <span>{title}</span>
       </button>
-      {htmlContent ? (
+      {content ? (
         <div
           ref={contentRef}
           className={styles['spoiler__content']}
-          dangerouslySetInnerHTML={{ __html: htmlContent as string }}
+          dangerouslySetInnerHTML={{ __html: content as string }}
         />
       ) : (
         <div ref={contentRef} className={styles['spoiler__content']}>
